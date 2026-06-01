@@ -304,11 +304,23 @@
                     // Center the model
                     model.position.sub(modelCenter);
                     
-                    // Update GUI ranges based on model size
-                    gui.__folders['X Clipping'].__controllers[0].min(-modelSize.x/2).max(modelSize.x/2).step(modelSize.x/100);
-                    gui.__folders['Y Clipping'].__controllers[0].min(-modelSize.y/2).max(modelSize.y/2).step(modelSize.y/100);
-                    gui.__folders['Z Clipping'].__controllers[0].min(-modelSize.z/2).max(modelSize.z/2).step(modelSize.z/100);
+            
+                    // FORCE clipping to maximum values
+                    clippingPlanes[0].constant = modelSize.x / 2; // X max
+                    clippingPlanes[1].constant = modelSize.y / 2; // Y max
+                    clippingPlanes[2].constant = modelSize.z / 2; // Z max
+
                     
+                    // Keep directions outward (optional but cleaner)
+                    clippingPlanes[0].normal.set(-1, 0, 0);
+                    clippingPlanes[1].normal.set(0, -1, 0);
+                    clippingPlanes[2].normal.set(0, 0, -1);
+
+                    
+                    // Apply clipping
+                    updateClipping();
+
+
                     // Setup group controls
                     setupGroupControls();
                     
